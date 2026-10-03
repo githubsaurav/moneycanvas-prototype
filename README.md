@@ -56,7 +56,9 @@ The loan model amortizes debt monthly, holds the EMI budget equal across options
 - `dist/index.html`: application shell and metadata.
 - `scripts/serve.mjs`: small local static server.
 
-All public assets are in `dist/`. It can be served by any static web host over HTTP; opening the HTML directly via `file://` does not load browser modules reliably. A live website has not been published as part of the repository delivery.
+All public assets are in `dist/`. It can be served by any static web host over HTTP; opening the HTML directly via `file://` does not load browser modules reliably. The Vercel deployment is configured by `vercel.json` to publish `dist/` as the site root. No framework build or dependency installation is required; deployment runs the JavaScript syntax checks. Keep the Vercel project Root Directory at the repository root, connect the `main` branch, and let the checked-in configuration select the output folder.
+
+Live prototype: https://moneycanvas-prototype.vercel.app/
 
 ## Checks
 
