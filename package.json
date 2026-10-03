@@ -1,0 +1,19 @@
+{
+  "name": "moneycanvas-prototype",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A guided MoneyCanvas chatbot with four interactive financial scenarios.",
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.mjs",
+    "check": "node --check dist/app.js && node --check dist/finance.js && node --check dist/scenarios.js",
+    "test:ui": "node tests/browser.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}
