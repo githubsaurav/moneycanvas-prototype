@@ -1,17 +1,26 @@
-# Validation record
+# Validation record — 10 October 2026
 
-Verified on 3 October 2026 with Node.js and Chromium.
+The refreshed MoneyCanvas MVP demonstration was checked in Chromium at desktop and mobile sizes.
 
-- Five financial-model tests passed: loan amortization, equal-budget bonus paths, home costs and remaining debt, emergency cash shortfalls, and card reward/fee/redemption rules.
-- All 54 complete combinations of predefined answers reached a decision canvas without missing values, NaN, or infinity.
-- All four scenarios passed at a 390 × 844 mobile viewport with no horizontal page or result overflow.
-- All four sliders responded to keyboard changes and continuous pointer dragging.
-- Follow-up summaries and explanation replies worked; changing assumptions cleared summaries made using earlier values.
-- Previous-answer navigation, restart, and returning to scenario selection worked.
-- No browser runtime errors were observed.
-- Desktop welcome, comparison outputs, and mobile layout were visually reviewed.
-- The optional WebMCP registration/action adapter passed a browser-stub test for registration, state updates, and invalid scenario rejection. The two tools also appeared in the Codex in-app browser's tool inventory; the stub test is not a certification of compatibility with every WebMCP implementation.
+- All 54 complete answer combinations reached the correct result workspace, without missing values or numerical errors.
+- All four workspaces passed at 390 × 844, with no page or canvas overflow. Credit card tiles intentionally scroll horizontally on mobile.
+- Allocation changes, pointer/keyboard slider input, housing horizons and appreciation presets, funding-source selection, runway months, card selection, and first/renewal year controls were exercised.
+- Follow-up summaries update to the current controls. Changing a result clears summaries from previous assumptions.
+- Back, restart, and scenario selection passed.
+- Normal-motion checks verified the two-second thinking delay, partial streamed text, analysis progress before result reveal, skip control, follow-up streaming, double-click guard, and scenario cancellation during response generation.
+- Reduced-motion settings skip decorative timing and animation.
+- Five financial tests and JavaScript syntax checks passed. Browser tests observed zero runtime errors.
+- Desktop workspaces and the mobile layout were visually reviewed.
 
-Run `npm test` and `npm run check` for local calculation/syntax checks. With the preview running at port 4173, install development dependencies using `npm ci`, install Chromium using `npx playwright install chromium`, and run `npm run test:ui` to repeat browser checks. Screenshots are written to the ignored `test-results/screenshots/` folder.
+Run `npm test` and `npm run check` for model and syntax checks. With the local preview running at port 4173, use `npm ci`, `npx playwright install chromium`, then `npm run test:ui`. Set `BASE_URL` to check a hosted deployment. Screenshots are written to the ignored `test-results/screenshots/` folder.
 
-These are software checks, not participant interviews or user research. No claim of real prototype validation by target users is made.
+These are software checks, not research interviews or participant validation. The optional browser-agent actions now await the same UI transitions; they do not connect to an LLM.
+
+## Card references
+
+Selected issuer terms were checked on 10 October 2026. The app provides product links and explains its simplified budget model.
+
+- [HDFC Millennia](https://www.hdfc.bank.in/credit-cards/millennia-credit-card), including linked CashPoints terms.
+- [SBI cashback revision effective April 2026](https://www.sbicard.com/cashback-revised).
+- [SBI fees and waiver conditions](https://www.sbicard.com/en/most-important-terms-and-conditions.page).
+- [Amazon Pay ICICI Bank](https://www.icici.bank.in/personal-banking/cards/credit-card/amazon-pay-credit-card).

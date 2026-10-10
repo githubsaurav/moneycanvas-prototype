@@ -7,7 +7,7 @@
   "scripts": {
     "start": "node scripts/serve.mjs",
     "test": "node --test tests/*.test.mjs",
-    "check": "node --check dist/app.js && node --check dist/finance.js && node --check dist/scenarios.js",
+    "check": "node --check dist/app.js && node --check dist/finance.js && node --check dist/scenarios.js && node --check dist/views.js && node --check dist/motion.js",
     "test:ui": "node tests/browser.mjs"
   },
   "engines": {

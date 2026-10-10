@@ -48,14 +48,35 @@ export function emergencyModel({delay=2,essential=40000,priority='buffer'}={}) {
     {id:'emi',name:'Pay over 12 months',cash:savings,fd,emi:emiPayment,cost:emiPayment*12-expense,note:'Preserves today’s cash, adds a monthly commitment.'}
   ].map(o=>({...o,afterDelay:o.cash-delay*(essential+o.emi)-(o.id==='fd'?o.cost:0),runway:(o.cash-(o.id==='fd'?o.cost:0))/(essential+o.emi),totalBuffer:o.cash+o.fd-(o.id==='fd'?o.cost:0),priority}));
 }
-export const cardProfiles={everyday:{name:'Everyday spender',travel:5000,dining:5000,other:20000},traveller:{name:'Frequent traveller',travel:15000,dining:5000,other:10000},light:{name:'Occasional card user',travel:2000,dining:3000,other:10000}};
-export function cardModel({profile='everyday',travel=cardProfiles[profile].travel,redeem='cash',fee='any'}={}) {
-  const spend={...cardProfiles[profile],travel};
+// Monthly example budgets. Categories are mutually exclusive.
+export const cardProfiles = {
+  everyday: {name:'Everyday mix', amazon:6000, partners:4000, online:5000, offline:12000, excluded:3000},
+  online: {name:'Mostly online', amazon:10000, partners:6000, online:8000, offline:4000, excluded:2000},
+  light: {name:'Light spender', amazon:2000, partners:1000, online:2000, offline:8000, excluded:2000}
+};
+export function cardModel({profile='everyday',prime=true,fee='any',year='first'}={}) {
+  const spend=cardProfiles[profile];
+  if(!spend) throw new Error('Unknown spending profile');
+  const total=spend.amazon+spend.partners+spend.online+spend.offline+spend.excluded;
+  const eligibleSpend=total-spend.excluded;
   return [
-    {id:'simple',name:'Everyday Cash',fee:0,rewards:(spend.travel+spend.dining+spend.other)*12*.01,detail:'1% cashback on all spending. No annual fee.'},
-    {id:'flex',name:'Flexible Plus',fee:999,rewards:12*(Math.min(500,spend.dining*.05)+(spend.travel+spend.other)*.01),detail:'5% dining cashback (₹500/month cap); 1% elsewhere.'},
-    {id:'travel',name:'Travel Miles',fee:2999,rewards:12*(spend.travel*.04+(spend.dining+spend.other)*.01)*(redeem==='travel'?1:.5),detail:`4% travel + 1% elsewhere at travel redemption value; ${redeem==='travel'?'full':'50%'} value used here.`}
-  ].map(c=>({...c,net:c.rewards-c.fee*1.18,annualFee:c.fee*1.18,eligible:fee!=='none'||c.fee===0,spend})).sort((a,b)=>b.net-a.net);
+    {id:'hdfc',bank:'HDFC Bank',name:'Millennia',fee:1000,waiver:eligibleSpend*12>100000,
+      rewards:12*(Math.min(1000,(spend.amazon+spend.partners)*.05)+Math.min(1000,(spend.online+spend.offline)*.01)),
+      headline:'5% at selected brands',benefit:'Amazon, Flipkart, Swiggy and other listed brands; 1% on other eligible spending.',
+      redemption:'CashPoints redeemed against the card balance; redemption charges may apply.',
+      source:'https://www.hdfc.bank.in/credit-cards/millennia-credit-card'},
+    {id:'sbi',bank:'SBI Card',name:'CASHBACK',fee:999,waiver:eligibleSpend*12>=200000,
+      rewards:12*(Math.min(2000,(spend.amazon+spend.partners+spend.online)*.05)+Math.min(2000,spend.offline*.01)),
+      headline:'5% on eligible online spend',benefit:'1% on eligible offline spending. Each bucket is capped at ₹2,000 per statement cycle.',
+      redemption:'Cashback credited to the card account automatically.',
+      source:'https://www.sbicard.com/en/personal/credit-cards/cashback-sbi-card.html'},
+    {id:'icici',bank:'ICICI Bank',name:'Amazon Pay',fee:0,waiver:false,
+      rewards:12*(spend.amazon*(prime?.05:.03)+(spend.partners+spend.online+spend.offline)*.01),
+      headline:prime?'5% on eligible Amazon shopping':'3% on eligible Amazon shopping',
+      benefit:'No joining or annual fee. Other eligible spending earns 1% in this model.',
+      redemption:'Rewards credited as Amazon Pay balance, not cash to your bank.',
+      source:'https://www.icici.bank.in/personal-banking/cards/credit-card/amazon-pay-credit-card'}
+  ].map(c=>{const annualFee=(year==='renewal'&&c.waiver?0:c.fee)*1.18;return {...c,annualFee,net:c.rewards-annualFee,eligible:fee!=='none'||c.fee===0,spend,total};}).sort((a,b)=>b.net-a.net);
 }
 export const rupee=value=>new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0}).format(Math.round(value));
 export function compact(value){const sign=value<0?'−':'';const v=Math.abs(value);return sign+'₹'+(v>=10000000?(v/10000000).toFixed(2)+' cr':v>=100000?(v/100000).toFixed(2)+'L':v>=1000?(v/1000).toFixed(1)+'k':Math.round(v));}
